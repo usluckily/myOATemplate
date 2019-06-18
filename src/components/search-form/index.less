@@ -1,0 +1,49 @@
+@normalWidth: 700px;
+@inputNumberWidth: 202px;
+@labelWidth: 120px;
+
+@inlineWidth: 202px;
+.search-form{
+    .el-form-item{
+        .el-form-item__label{
+            width: @labelWidth;
+        }
+        .el-checkbox{
+            margin-left: 0 !important;
+            margin-right: 20px !important;
+            min-width: 80px;
+        }
+        .el-input{
+            width: @normalWidth !important;
+        }
+        .el-radio-group{
+            .radio-note{
+                margin-left: 20px;
+                font-size: 14px;
+                display: inline-block;
+            }
+        }
+        .el-input-number{
+            width: @inputNumberWidth !important;
+            .el-input{
+                width: @inputNumberWidth !important;
+            }
+        }
+        .el-textarea{
+            width: @normalWidth !important;
+        }
+        .el-tag{
+            margin-right: 5px;
+        }
+        .my-img{
+            max-width: 400px;
+            max-height: 200px;
+        }
+    }
+}
+
+.search-form.el-form--inline{
+    .el-input{
+        width: @inlineWidth !important;
+    }
+}

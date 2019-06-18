@@ -1,0 +1,18 @@
+.el-menu-item.is-active{
+    background: #000 !important;
+    color: #fff !important;
+    /* border-left: 4px solid #409EFF; */
+}
+.el-menu-item.is-active:after{
+    content: '';
+    display: block;
+    position: absolute;
+    left:0;
+    top:0;
+    height: 100%;
+    width: 4px;
+    background: #409EFF;
+}
+.el-menu-item,.el-submenu__title{
+    color: rgba(255, 255, 255, 0.7) !important;
+}

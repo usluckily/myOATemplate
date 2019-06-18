@@ -1,0 +1,30 @@
+.my-el-table{
+    margin-bottom: 20px;
+    img{
+        // height: 50px;
+        width: 80px;
+    }
+    tbody{
+        .cell{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            /*! autoprefixer: off */
+            -webkit-box-orient: vertical;
+        }
+    }
+  .el-table__fixed-body-wrapper{
+    tbody{
+      .is-hidden{
+        .cell{
+          visibility:visible;
+        }
+      }
+    }
+
+  }
+}
+.my-el-pagination{
+    text-align: right;
+}

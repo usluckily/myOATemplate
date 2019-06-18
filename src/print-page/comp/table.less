@@ -1,0 +1,43 @@
+@border: 1px solid #DCDCDC;
+
+.print-table-strange,
+.print-table-normal {
+    border: @border;
+}
+
+// .print-table-normal{
+//     .print-table-item{
+//         .grid{
+//             padding:10px 5px;
+//         }
+//     }
+// }
+
+.print-table-item {
+    display        : flex;
+    justify-content: flex-start;
+    width          : 100%;
+    border-bottom  : @border;
+
+    .grid {
+        flex        : 1;
+        padding     : 5px;
+        border-right: @border;
+        overflow    : hidden;
+        &:last-child {
+            border: none;
+        }
+        &.normal-flex{
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    .grid.sign {
+        padding: 20px 5px;
+    }
+
+    &:last-child {
+        border: none;
+    }
+}

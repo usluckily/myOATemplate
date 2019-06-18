@@ -1,0 +1,16 @@
+@keyframes loginBox{
+    0%{
+        top: 50px;
+        opacity: 0;
+    }
+    50%{
+        top: 150px;
+        opacity: 1;
+    }
+    75%{
+        top: 140px;
+    }
+    100%{
+        top: 150px;
+    }
+}

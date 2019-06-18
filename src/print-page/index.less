@@ -1,0 +1,57 @@
+@border:1px solid #DCDCDC;
+    
+    .normal-flex{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .print-form{
+        font-size: 14px !important;
+        font-weight:normal;
+        page-break-before: auto;        
+        page-break-after: always;
+    }
+    h1, h2{
+        text-align: center;
+        color: #373331;
+    }
+    h2{
+        font-size: 28px;
+    }
+    .print-form-right{
+        text-align: right;
+        // margin-right: 150px;
+        position: relative;
+        right: 150px;
+    }
+    .print-form-item{
+        margin-bottom: 25px;
+        &:last-child{
+            margin-bottom: 0;
+        }
+        .tit{
+            line-height: 40px;
+        }
+    }
+    .print-table-strange,.print-table-normal{
+        border:@border;    
+    }
+    .print-table-item{
+        display: flex;
+        justify-content: flex-start;
+        width:100%;
+        border-bottom: @border;
+        .grid{
+            flex:1;
+            padding: 5px;
+            border-right: @border;
+            overflow:hidden;
+            &:last-child{
+                border:none;
+            }
+        }
+        &:last-child{
+            border:none;
+        }
+    }
