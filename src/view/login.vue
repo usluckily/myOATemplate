@@ -4,12 +4,12 @@
       <spiderWeb></spiderWeb>
       <div class="login-box-main">
         <div class="item">
-            <h5 class="item-text">用户名</h5>
+            <h5 class="item-text">用户名/Username</h5>
             <el-input v-model="user.account" placeholder="用户名" class="my-login-input"></el-input>
           </div>
 
           <div class="item">
-            <h5 class="item-text">密码</h5>
+            <h5 class="item-text">密码/Password</h5>
             <el-input type="password" v-model="user.pwd" placeholder="密码" @keyup.enter.native="login()" class="my-login-input"></el-input>
           </div>
 
