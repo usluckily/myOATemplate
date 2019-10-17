@@ -9,7 +9,7 @@
           </div>
 
           <div class="item">
-            <h5 class="item-text">密码</h5>
+            <h5 class="item-text">密码/Password</h5>
             <el-input type="password" v-model="user.pwd" placeholder="密码" @keyup.enter.native="login()" class="my-login-input"></el-input>
           </div>
 
