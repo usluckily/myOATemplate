@@ -74,31 +74,31 @@ export const menuData = [
         },
       ]
     },
-    // {
-    //   title: '测试菜单',
-    //   id: '8',
-    //   icon: 'el-icon-s-grid',
-    //   children: [
-    //     {
-    //       title: '二级菜单',
-    //       id:'8-1',
-    //       src:'/first/second',
-    //       icon:'el-icon-s-grid',
-    //       children: [
-    //         {
-    //           title: '三级菜单',
-    //           id: '8-1-1',
-    //           src: '/first/second/third',
-    //           children:[
-    //             {
-    //               title:'四级菜单',
-    //               id: '8-1-1-1',
-    //               src: '/first/second/third/fouth',
-    //             }
-    //           ]
-    //         }
-    //       ]
-    //     },
-    //   ]
-    // }
+    {
+      title: '测试菜单',
+      id: '8',
+      icon: 'el-icon-s-grid',
+      children: [
+        {
+          title: '二级菜单',
+          id:'8-1',
+          src:'/first/second',
+          icon:'el-icon-s-grid',
+          children: [
+            {
+              title: '三级菜单',
+              id: '8-1-1',
+              src: '/first/second/third',
+              children:[
+                {
+                  title:'四级菜单',
+                  id: '8-1-1-1',
+                  src: '/first/second/third/fouth',
+                }
+              ]
+            }
+          ]
+        },
+      ]
+    }
   ]
