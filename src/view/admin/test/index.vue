@@ -8,6 +8,9 @@
             </el-radio-group>
         </el-row>
 
+        <br>
+            <router-view></router-view>
+        <br>
         <component :is="checkedComp"></component>
     </div>
 </template>
@@ -16,6 +19,7 @@
 import Vue from 'vue'
 import error from '@/view/admin/404.vue'
 import loading from '@/components/loading/normal.vue'
+import {menuData} from '../../../config/menuData'
 
 // const comp1 = Vue.component('comp1', function (resolve) {
 //     require(['./comp1.vue'], resolve)
@@ -31,6 +35,40 @@ export default {
             checkedComp:'comp1',
             loading:true
         }
+    },
+    created() {
+        let menuFactory = (arr) => {
+        let res = []
+        try{
+            arr.forEach(item => {
+            if(item.url){
+                if(item.children && item.children.length){
+                let obj = {
+                    path: item.url,
+                    component: item.url+'.vue',
+                    children:[]
+                }
+                obj.children = menuFactory(item.children)
+                res.push(obj)
+                }else{
+                res.push({
+                    path: url,
+                    component: url+'.vue'
+                })
+                }
+            }else{
+                res = res.concat(menuFactory(item.children))
+            }
+            })
+        }catch(e){
+            throw e
+        }
+        
+        return res
+        }
+
+        let res = menuFactory(menuData)
+        console.log(res,'xxxxxx')
     },
     components:{
         comp1: () => ({

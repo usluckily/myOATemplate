@@ -33,7 +33,13 @@ export default[
         {
           path:'test',
           name:'test',
-          component:test
+          component:test,
+          children:[
+            {
+              path: 'one',
+              component: error
+            }
+          ]
         },
         {
             path:'*',

@@ -1,12 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/view/login'
-
 import admin from './admin'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -20,3 +19,9 @@ export default new Router({
     ...admin
   ]
 })
+
+router.addRoutes([
+  {path:'/xxxxx', component: login}
+])
+
+export default router
