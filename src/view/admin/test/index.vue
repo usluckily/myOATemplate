@@ -37,6 +37,7 @@ export default {
         }
     },
     created() {
+        return
         let menuFactory = (arr) => {
         let res = []
         try{
