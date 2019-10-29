@@ -41,7 +41,7 @@ router.beforeEach(function(to,from,next){
   NProgress.start();
   let isLogin = sessionStorage.getItem('isLogin')
 
-  if(to.name != 'login'){
+  if(to.name != 'login' && to.name != 'rootTest'){
     if(isLogin){
       next();
     }else{
