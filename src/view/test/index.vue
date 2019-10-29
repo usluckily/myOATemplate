@@ -1,6 +1,6 @@
 <template>
     <div>
-        {{itemList}}
+        <!-- {{itemList}} -->
         <el-row>
             <el-select v-model="selectItemType">
                 <el-option :value="i" :label="i" v-for="(i, index) in localItemTypeList" :key="index"></el-option>
@@ -23,7 +23,7 @@
             :id="i.id"
             :style="{width:i.width,height:i.height,zIndex:i.zIndex,top:i.top,left:i.left}">
                 {{i.type}}
-                <div :id="i.coorId" class="coor"></div>
+                <div :id="i.coorId" class="coor" v-if="status !== 'auto'"></div>
             </div>
         </div>
     </div>
@@ -67,15 +67,17 @@ export default {
                 left: ''
             })
             this.$nextTick(() => {
-                this.setDrag('#item'+num, '#coor'+num)
+                this.setDrag('#item'+num, '#coor'+num, num)
             })
         },
-        setDrag(dom, coorId) {
-            let boxNodeOffsetTop = this.boxNodeOffsetTop
+        setDrag(dom, coorId, index) {
+            let boxNodeOffsetTop = this.boxNodeOffsetTop, vm = this
             let $box = $(dom).mousedown(function(e) {
-                var offset = $(this).offset();
+                let offset = $(this).offset(), 
+                x = e.pageX - offset.left, 
+                y = e.pageY - offset.top + boxNodeOffsetTop
                 
-                this.posix = {'x': e.pageX - offset.left, 'y': e.pageY - offset.top + boxNodeOffsetTop};
+                this.posix = {'x': x, 'y': y};
                 $.extend(document, {'move': true, 'move_target': this});
             }).on('mousedown', coorId, function(e) {
                 var posix = {
@@ -92,7 +94,16 @@ export default {
                     });
                 }});
                 return false;
-            });
+            }).on('mouseup',function(e){
+                let target = e.target
+                if(target.className === 'coor'){
+                    target = target.parentNode
+                }
+                vm.itemList[index]['top'] = target.offsetTop + 'px'
+                vm.itemList[index]['left'] = target.offsetLeft + 'px'
+                vm.itemList[index]['width'] = target.offsetWidth + 'px'
+                vm.itemList[index]['height'] = target.offsetHeight + 'px'
+            })
         },
         autoCreate() {
             this.itemList = []
