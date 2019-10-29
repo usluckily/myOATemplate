@@ -1,5 +1,6 @@
 <template>
     <div>
+        {{itemList}}
         <el-row>
             <el-select v-model="selectItemType">
                 <el-option :value="i" :label="i" v-for="(i, index) in localItemTypeList" :key="index"></el-option>
@@ -20,7 +21,10 @@
             v-for="(i, index) in itemList" 
             :key="index" 
             :id="i.id"
-            :style="{width:i.width,height:i.height,zIndex:i.zIndex}">{{i.type}}</div>
+            :style="{width:i.width,height:i.height,zIndex:i.zIndex,top:i.top,left:i.left}">
+                {{i.type}}
+                <div :id="i.coorId" class="coor"></div>
+            </div>
         </div>
     </div>
 </template>
@@ -34,6 +38,7 @@ export default {
          return {
              status: 'handle',
              boxNode:{},
+             boxNodeOffsetTop: 0,
              boxWidth: '1000px',
              boxHeight: '600px',
              selectItemType: '',
@@ -45,6 +50,7 @@ export default {
     },
     mounted() {
         this.boxNode = document.getElementById('view-box')
+        this.boxNodeOffsetTop = this.boxNode.offsetTop
     },
     methods:{
         addNode() {
@@ -55,16 +61,38 @@ export default {
                 id:'item'+num,
                 width:'150px',
                 height:'100px',
-                zIndex: num + 1
+                zIndex: num + 1,
+                coorId: 'coor'+num,
+                top: '',
+                left: ''
             })
             this.$nextTick(() => {
-                $('#item'+num).mousedown(function(e) {
-                    var offset = $(this).offset();
-                    
-                    this.posix = {'x': e.pageX - offset.left, 'y': e.pageY - offset.top};
-                    $.extend(document, {'move': true, 'move_target': this});
-                });
+                this.setDrag('#item'+num, '#coor'+num)
             })
+        },
+        setDrag(dom, coorId) {
+            let boxNodeOffsetTop = this.boxNodeOffsetTop
+            let $box = $(dom).mousedown(function(e) {
+                var offset = $(this).offset();
+                
+                this.posix = {'x': e.pageX - offset.left, 'y': e.pageY - offset.top + boxNodeOffsetTop};
+                $.extend(document, {'move': true, 'move_target': this});
+            }).on('mousedown', coorId, function(e) {
+                var posix = {
+                        'w': $box.width(), 
+                        'h': $box.height(), 
+                        'x': e.pageX, 
+                        'y': e.pageY
+                    };
+                
+                $.extend(document, {'move': true, 'call_down': function(e) {
+                    $box.css({
+                        'width': Math.max(30, e.pageX - posix.x + posix.w),
+                        'height': Math.max(30, e.pageY - posix.y + posix.h)
+                    });
+                }});
+                return false;
+            });
         },
         autoCreate() {
             this.itemList = []
@@ -77,8 +105,6 @@ export default {
                 this.itemList.push({
                     type:'',
                     id:'item'+i,
-                    // width:'150px',
-                    // height:'100px',
                     zIndex: i + 1
                 })
             }
@@ -99,6 +125,8 @@ export default {
         .item{
             position: absolute;
             border: 1px solid #eee;
+            background:#fff;
+            .coor { width: 10px; height: 10px; overflow: hidden; cursor: se-resize; position: absolute; right: 0; bottom: 0; background-color: #09C; }
         }
         &.auto{
             .item{
