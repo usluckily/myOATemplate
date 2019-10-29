@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!-- {{itemList}} -->
         <el-row>
             <el-select v-model="selectItemType">
                 <el-option :value="i" :label="i" v-for="(i, index) in localItemTypeList" :key="index"></el-option>
@@ -22,20 +21,31 @@
             :key="index" 
             :id="i.id"
             :style="{width:i.width,height:i.height,zIndex:i.zIndex,top:i.top,left:i.left}">
-                {{i.type}}
+                <div>{{i.type}}</div>
+                <br>
+                <el-input v-model="i.textArea"></el-input>
                 <div :id="i.coorId" class="coor" v-if="status !== 'auto'"></div>
             </div>
         </div>
+
+        <el-button @click="dialogVisible = true">click</el-button>
+
+        <mView :itemList="itemList" v-if="dialogVisible" @close="dialogVisible = false"></mView>
+
+        {{itemList}}
     </div>
 </template>
 
 <script>
 import $ from 'jquery'
+import mView from './view'
+
 require('@static/plugins/drag.js')
 
 export default {
     data(){
          return {
+             dialogVisible: false,
              status: 'handle',
              boxNode:{},
              boxNodeOffsetTop: 0,
@@ -59,12 +69,13 @@ export default {
             this.itemList.push({
                 type:this.selectItemType,
                 id:'item'+num,
-                width:'150px',
-                height:'100px',
+                width:'300px',
+                height:'180px',
                 zIndex: num + 1,
                 coorId: 'coor'+num,
                 top: '',
-                left: ''
+                left: '',
+                textArea: ''
             })
             this.$nextTick(() => {
                 this.setDrag('#item'+num, '#coor'+num, num)
@@ -99,6 +110,7 @@ export default {
                 if(target.className === 'coor'){
                     target = target.parentNode
                 }
+                if(target.className !== 'item') return
                 vm.itemList[index]['top'] = target.offsetTop + 'px'
                 vm.itemList[index]['left'] = target.offsetLeft + 'px'
                 vm.itemList[index]['width'] = target.offsetWidth + 'px'
@@ -123,7 +135,7 @@ export default {
 
     },
     components:{
-
+        mView
     }
 }
 </script>
@@ -134,6 +146,7 @@ export default {
         border: 1px solid #ccc;
         position:relative;
         .item{
+            padding: 10px;
             position: absolute;
             border: 1px solid #eee;
             background:#fff;

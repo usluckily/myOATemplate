@@ -1,10 +1,11 @@
 <template>
-    <div class="main-box">
+    <div id="main-content">
+        {{itemList}}
         <!-- <div id="content">
             <div v-for="i in 7" :key="i" draggable="true">{{i}}</div>
         </div> -->
         <div class="box" 
-        v-for="(i, index) in config" 
+        v-for="(i, index) in localItemList" 
         :key="index" 
         :style="styleComp(i)">
             <el-carousel 
@@ -12,7 +13,7 @@
             :height="i.height"
             indicator-position="none"
             v-if="i.type == 'swiper'">
-                <el-carousel-item v-for="url in i.urls" :key="url">
+                <el-carousel-item v-for="url in i.textArea.split(',')" :key="url">
                     <el-image :src="url" fit="cover" style="width:100%;height:100%;"></el-image>
                 </el-carousel-item>
             </el-carousel>
@@ -20,19 +21,22 @@
             <video 
             autoplay 
             controls="false" 
-            :src="i.url" 
+            :src="i.textArea" 
             v-else-if="i.type == 'video'" 
             :style="{width:i.width,height:i.height}"></video>
 
             <p 
             v-else-if="i.type == 'text'" 
-            :style="{width:i.width,height:i.height}">{{i.text}}</p>
+            :style="{width:i.width,height:i.height}">{{i.textArea}}</p>
         </div>
+
+        <el-button @click="emitClose">click</el-button>
     </div>
 </template>
 
 <script>
 export default {
+    props:['itemList'],
     data(){
         return {
             content:{},
@@ -83,20 +87,28 @@ export default {
     created() {
 
     },
+    computed:{
+        localItemList(){
+            return this.itemList
+        }
+    },
     methods:{
         styleComp(item) {
             return {
                 width:item.width,
                 height:item.height,
                 position:'absolute',
-                top: item.position[0],
-                left: item.position[1],
+                top: item.top,
+                left: item.left,
             }
         },
         renderContent() {
             this.content = document.querySelector('#content')
             let child = ''
 
+        },
+        emitClose() {
+            this.$emit('close')
         }
     }
 }
@@ -105,6 +117,15 @@ export default {
 <style lang="less" scoped>
 .box{
     border:1px solid #ccc;
+}
+#main-content{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    background:#fff;
+    top:0;
+    left:0;
 }
 .main-box{
     width:100%;
