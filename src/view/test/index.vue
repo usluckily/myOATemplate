@@ -20,7 +20,7 @@
             v-for="(i, index) in itemList" 
             :key="index" 
             :id="i.id"
-            :style="{width:i.width,height:i.height,zIndex:i.zIndex,top:i.top,left:i.left}">
+            :style="{width:i.width + 'px',height:i.height + 'px',zIndex:i.zIndex,top:i.top + 'px',left:i.left + 'px'}">
                 <div>{{i.type}}</div>
                 <br>
                 <el-input v-model="i.textArea"></el-input>
@@ -28,17 +28,18 @@
             </div>
         </div>
 
-        <el-button @click="dialogVisible = true">click</el-button>
+        <el-button @click="dialogVisible = true">预览</el-button>
 
         <mView :itemList="itemList" v-if="dialogVisible" @close="dialogVisible = false"></mView>
 
-        {{itemList}}
+        <!-- {{itemList}} -->
     </div>
 </template>
 
 <script>
 import $ from 'jquery'
 import mView from './view'
+import { debug } from 'util'
 
 require('@static/plugins/drag.js')
 
@@ -69,8 +70,8 @@ export default {
             this.itemList.push({
                 type:this.selectItemType,
                 id:'item'+num,
-                width:'300px',
-                height:'180px',
+                width:'300',
+                height:'180',
                 zIndex: num + 1,
                 coorId: 'coor'+num,
                 top: '',
@@ -107,14 +108,12 @@ export default {
                 return false;
             }).on('mouseup',function(e){
                 let target = e.target
-                if(target.className === 'coor'){
-                    target = target.parentNode
-                }
-                if(target.className !== 'item') return
-                vm.itemList[index]['top'] = target.offsetTop + 'px'
-                vm.itemList[index]['left'] = target.offsetLeft + 'px'
-                vm.itemList[index]['width'] = target.offsetWidth + 'px'
-                vm.itemList[index]['height'] = target.offsetHeight + 'px'
+                target = vm.getParentNode(target, 'item')
+
+                vm.itemList[index]['top'] = target.offsetTop
+                vm.itemList[index]['left'] = target.offsetLeft
+                vm.itemList[index]['width'] = target.offsetWidth
+                vm.itemList[index]['height'] = target.offsetHeight
             })
         },
         autoCreate() {
@@ -130,6 +129,14 @@ export default {
                     id:'item'+i,
                     zIndex: i + 1
                 })
+            }
+        },
+        getParentNode(target, parentClass) {
+            let resultTarget = target
+            if(resultTarget.className !== parentClass){
+                return this.getParentNode(resultTarget.parentNode, parentClass)
+            }else{
+                return resultTarget
             }
         }
 

@@ -1,6 +1,5 @@
 <template>
     <div id="main-content">
-        {{itemList}}
         <!-- <div id="content">
             <div v-for="i in 7" :key="i" draggable="true">{{i}}</div>
         </div> -->
@@ -30,7 +29,7 @@
             :style="{width:i.width,height:i.height}">{{i.textArea}}</p>
         </div>
 
-        <el-button @click="emitClose">click</el-button>
+        <el-button @click="emitClose">关闭</el-button>
     </div>
 </template>
 
@@ -87,6 +86,9 @@ export default {
     created() {
 
     },
+    mounted() {
+        
+    },
     computed:{
         localItemList(){
             return this.itemList
@@ -94,12 +96,14 @@ export default {
     },
     methods:{
         styleComp(item) {
+            let widthScale = document.body.offsetWidth / 1000,
+                heightScale = document.body.offsetHeight / 600
             return {
-                width:item.width,
-                height:item.height,
+                width:item.width * widthScale + 'px',
+                height:item.height * heightScale + 'px',
                 position:'absolute',
-                top: item.top,
-                left: item.left,
+                top: item.top * heightScale + 'px',
+                left: item.left * widthScale + 'px',
             }
         },
         renderContent() {
