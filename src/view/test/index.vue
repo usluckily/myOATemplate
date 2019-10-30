@@ -1,17 +1,18 @@
 <template>
-    <div>
+    <div style="padding:20px;">
         <el-row>
             <el-select v-model="selectItemType">
                 <el-option :value="i" :label="i" v-for="(i, index) in localItemTypeList" :key="index"></el-option>
             </el-select>
-            <el-button @click="addNode">add</el-button>
+            <el-button @click="addNode" type="primary">add</el-button>
+            <el-button @click="dialogVisible = true" type="primary">预览</el-button>
         </el-row>
         <br>
 
         <el-row>
             <el-input-number v-model="rowNum" size="mini" :step="1" :precision='0' :max="10" :min="0"></el-input-number> x 
             <el-input-number v-model="colNum" size="mini" :step="1" :precision='0' :max="10" :min="0"></el-input-number>
-            <el-button @click="autoCreate">自动划分</el-button>
+            <el-button @click="autoCreate" type="primary">自动划分</el-button>
         </el-row>
         <br/>
 
@@ -23,14 +24,14 @@
             :style="{width:i.width + 'px',height:i.height + 'px',zIndex:i.zIndex,top:i.top + 'px',left:i.left + 'px'}">
                 <div>{{i.type}}</div>
                 <br>
-                <el-input v-model="i.textArea"></el-input>
+                <el-row><el-input v-model="i.value" placeholder="填写url或文字，多个url‘,’分隔"></el-input></el-row>
+                <br>
+                <el-row><el-button type="primary">保存</el-button></el-row>
                 <div :id="i.coorId" class="coor" v-if="status !== 'auto'"></div>
             </div>
         </div>
 
-        <el-button @click="dialogVisible = true">预览</el-button>
-
-        <mView :itemList="itemList" v-if="dialogVisible" @close="dialogVisible = false"></mView>
+        <mView :itemList="itemList" :status="status" :gridConfig="gridConfig" v-if="dialogVisible" @close="dialogVisible = false"></mView>
 
         <!-- {{itemList}} -->
     </div>
@@ -50,18 +51,24 @@ export default {
              status: 'handle',
              boxNode:{},
              boxNodeOffsetTop: 0,
+             boxNodeOffsetLeft: 0,
              boxWidth: '1000px',
              boxHeight: '600px',
              selectItemType: '',
-             localItemTypeList: ['image','scroll','text','video'],
+             localItemTypeList: ['image','swiper','text','video'],
              itemList: [],
              rowNum: '',
-             colNum: ''
+             colNum: '',
+             gridConfig:{
+                 gridTemplateColumns:'',
+                 gridTemplateRows:''
+             }
          }
     },
     mounted() {
         this.boxNode = document.getElementById('view-box')
         this.boxNodeOffsetTop = this.boxNode.offsetTop
+        this.boxNodeOffsetLeft = this.boxNode.offsetLeft
     },
     methods:{
         addNode() {
@@ -76,17 +83,17 @@ export default {
                 coorId: 'coor'+num,
                 top: '',
                 left: '',
-                textArea: ''
+                value: ''
             })
             this.$nextTick(() => {
                 this.setDrag('#item'+num, '#coor'+num, num)
             })
         },
         setDrag(dom, coorId, index) {
-            let boxNodeOffsetTop = this.boxNodeOffsetTop, vm = this
+            let boxNodeOffsetTop = this.boxNodeOffsetTop, boxNodeOffsetLeft = this.boxNodeOffsetLeft, vm = this
             let $box = $(dom).mousedown(function(e) {
                 let offset = $(this).offset(), 
-                x = e.pageX - offset.left, 
+                x = e.pageX - offset.left + boxNodeOffsetLeft, 
                 y = e.pageY - offset.top + boxNodeOffsetTop
                 
                 this.posix = {'x': x, 'y': y};
@@ -121,13 +128,14 @@ export default {
             this.status = 'auto'
             let num = this.rowNum * this.colNum
             this.boxNode.style.display = 'grid'
-            this.boxNode.style.gridTemplateColumns = 'repeat('+this.rowNum+', '+(100/this.rowNum)+'%)'
-            this.boxNode.style.gridTemplateRows = 'repeat('+this.colNum+', '+(100/this.colNum)+'%)'
+            this.boxNode.style.gridTemplateColumns = this.gridConfig.gridTemplateColumns = 'repeat('+this.rowNum+', '+(100/this.rowNum)+'%)'
+            this.boxNode.style.gridTemplateRows = this.gridConfig.gridTemplateRows = 'repeat('+this.colNum+', '+(100/this.colNum)+'%)'
             for(let i=0;i<num;i++){
                 this.itemList.push({
-                    type:'',
+                    type:'text',
                     id:'item'+i,
-                    zIndex: i + 1
+                    zIndex: i + 1,
+                    value:''
                 })
             }
         },

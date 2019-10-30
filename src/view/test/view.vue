@@ -1,41 +1,44 @@
 <template>
-    <div id="main-content">
-        <!-- <div id="content">
-            <div v-for="i in 7" :key="i" draggable="true">{{i}}</div>
-        </div> -->
+<div>
+    <div style="position:fixed;top:0;left:0;z-index:9999">
+        <el-button @click="emitClose" type="danger">关闭</el-button>
+    </div>
+
+    <div id="main-content" :class="{'grid-box':status == 'auto'}">
         <div class="box" 
         v-for="(i, index) in localItemList" 
         :key="index" 
         :style="styleComp(i)">
             <el-carousel 
             trigger="click" 
-            :height="i.height"
+            :height="heightScale(i.height) + 'px'"
             indicator-position="none"
             v-if="i.type == 'swiper'">
-                <el-carousel-item v-for="url in i.textArea.split(',')" :key="url">
-                    <el-image :src="url" fit="cover" style="width:100%;height:100%;"></el-image>
+                <el-carousel-item height="100%" v-for="url in i.value.split(',')" :key="url">
+                    <el-image :src="url" fit="fill" style="width:100%;height:100%;"></el-image>
                 </el-carousel-item>
             </el-carousel>
 
             <video 
             autoplay 
             controls="false" 
-            :src="i.textArea" 
+            :src="i.value" 
             v-else-if="i.type == 'video'" 
-            :style="{width:i.width,height:i.height}"></video>
+            style="width:100%;height:100%;"></video>
 
             <p 
             v-else-if="i.type == 'text'" 
-            :style="{width:i.width,height:i.height}">{{i.textArea}}</p>
-        </div>
+            :style="{'text-align':'center'}">{{i.value}}</p>
 
-        <el-button @click="emitClose">关闭</el-button>
+            <el-image :src="i.value" fit="fill" style="width:100%;height:100%;" v-else-if="i.type === 'image'"></el-image>
+        </div>
     </div>
+</div>
 </template>
 
 <script>
 export default {
-    props:['itemList'],
+    props:['itemList', 'status', 'gridConfig'],
     data(){
         return {
             content:{},
@@ -83,11 +86,12 @@ export default {
             ]
         }
     },
-    created() {
-
-    },
     mounted() {
-        
+        if(this.status == 'auto') {
+            let box = document.getElementById('main-content')
+            box.style.gridTemplateColumns = this.gridConfig.gridTemplateColumns
+            box.style.gridTemplateRows = this.gridConfig.gridTemplateRows
+        }
     },
     computed:{
         localItemList(){
@@ -101,10 +105,14 @@ export default {
             return {
                 width:item.width * widthScale + 'px',
                 height:item.height * heightScale + 'px',
-                position:'absolute',
+                position:this.status != 'auto' ? 'absolute' : 'relative',
                 top: item.top * heightScale + 'px',
                 left: item.left * widthScale + 'px',
             }
+        },
+        heightScale(val){
+            let heightScale = document.body.offsetHeight / 600
+            return val * heightScale
         },
         renderContent() {
             this.content = document.querySelector('#content')
@@ -121,6 +129,7 @@ export default {
 <style lang="less" scoped>
 .box{
     border:1px solid #ccc;
+    background:#fff;
 }
 #main-content{
     position: fixed;
@@ -130,6 +139,9 @@ export default {
     background:#fff;
     top:0;
     left:0;
+    &.grid-box{
+        display:grid;
+    }
 }
 .main-box{
     width:100%;

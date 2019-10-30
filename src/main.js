@@ -33,7 +33,7 @@ new Vue({
   template: '<App/>'
 })
 
-if(!sessionStorage.getItem('isLogin')){
+if(!sessionStorage.getItem('isLogin') && location.hash.indexOf('test') < 0){
   router.push({ path:'/login' })
 }
 
