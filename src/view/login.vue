@@ -50,6 +50,7 @@
     methods:{
       login (){
         // if(!this.user.account || !this.user.pwd) return this.$message.error('请填写用户密码')
+        return this.$message('登录功能后端开发中...')
 
         this.$store.dispatch('login', this.user).then(res => {
           sessionStorage.setItem('isLogin',true)

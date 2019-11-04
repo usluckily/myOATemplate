@@ -5,7 +5,7 @@
     </div>
 
     <div id="main-content" :class="{'grid-box':status == 'auto'}">
-        <div class="box" 
+        <div class="box"
         v-for="(i, index) in localItemList" 
         :key="index" 
         :style="styleComp(i)">
