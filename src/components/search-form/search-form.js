@@ -389,7 +389,11 @@ export default {
                 disabled: this.disabled
             }
         }, this.items.map(item => {
-            if(item.hide) return //新增隐藏属性
+            if(item.hide) {
+                console.log(this)
+                this.$refs['form'].clearValidate()
+                return
+            } //新增隐藏属性
 
             return h('el-form-item', {
                 props: {

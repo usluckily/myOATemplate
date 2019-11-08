@@ -1,5 +1,6 @@
 <template>
     <div>
+        {{search}}
         <searchForm :model="search" :items="items" ref="normalForm" :showMessage="true"
         labelWidth="120px"></searchForm>
     </div>
@@ -20,7 +21,16 @@ export default {
                 approve: [],
                 send: []
             },
-            items:[
+        }
+    },
+    methods:{
+        save(){
+            this.$message.success('提交成功')
+        }
+    },
+    computed:{
+        items() {
+            return [
                 {
                     prop: 'type',
                     type: 'select',
@@ -57,7 +67,8 @@ export default {
                     prop: 'explain',
                     type: 'textarea',
                     label: '申请说明:',
-                    rules: 'default'
+                    rules: 'default',
+                    hide: this.search.state == 1
                 },
                 {
                     prop: 'approve',
@@ -98,11 +109,6 @@ export default {
                     ]
                 }
             ]
-        }
-    },
-    methods:{
-        save(){
-            this.$message.success('提交成功')
         }
     },
     components:{
